@@ -1,0 +1,43 @@
+<!-- 
+  COPY THIS ENTIRE script tag এবং browser DevTools Console-এ paste করুন
+  এটি forcefully cache clear করবে এবং page reload করবে
+-->
+
+<script>
+// Step 1: Clear all caches
+console.log('🧹 Clearing all browser caches...');
+
+// Clear localStorage
+localStorage.clear();
+console.log('✅ LocalStorage cleared');
+
+// Clear sessionStorage
+sessionStorage.clear();
+console.log('✅ SessionStorage cleared');
+
+// Clear all cache storage
+if ('caches' in window) {
+    caches.keys().then(names => {
+        names.forEach(name => {
+            caches.delete(name);
+        });
+        console.log('✅ Cache storage cleared');
+    });
+}
+
+// Unregister service workers
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(registration => {
+            registration.unregister();
+        });
+        console.log('✅ Service workers unregistered');
+    });
+}
+
+// Step 2: Hard reload after 500ms
+setTimeout(() => {
+    console.log('🔄 Force reloading page...');
+    window.location.href = window.location.href + '?nocache=' + Date.now();
+}, 500);
+</script>
